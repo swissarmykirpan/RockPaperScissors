@@ -1,18 +1,24 @@
-﻿using System;
-
-namespace RockPaperScissors.Players
+﻿namespace RockPaperScissors.Players
 {
-    public class TacticalComputer : Player
+    public class TacticalComputer : RandomComputer
     {
-        public TacticalComputer() : base(nameof(TacticalComputer) + new Random().Next(1, 10000))
+        public TacticalComputer(): base(nameof(TacticalComputer))
         {
 
         }
 
-        public override Moves Play()
+        public override Moves Play(Moves[] rangeOfMoves = null)
         {
-            Console.WriteLine("Enter move:");
-            return (Moves)int.Parse(Console.ReadLine());
+            var move = LastMove.HasValue 
+                ? base.Play(LastMove.Value.DefeatedBy())
+                : base.Play(rangeOfMoves);
+
+
+            LastMove = move;
+
+            return move;
         }
+
+        internal Moves? LastMove;
     }
 }

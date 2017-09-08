@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace RockPaperScissors.Players
 {
@@ -9,10 +10,11 @@ namespace RockPaperScissors.Players
 
         }
 
-        public override Moves Play()
+        public override Moves Play(Moves[] rangeOfMoves = null)
         {
-            Console.WriteLine($"{Name}, please enter your move: ");
-            return (Moves)int.Parse(Console.ReadLine());
+            Console.Write($"{Name}, please enter a move (${string.Join(" ", Enum.GetValues(typeof(Moves)).Cast<Moves>().Select(x => x.ToString()))}): ");
+            return (Moves)Enum.Parse(typeof(Moves), Console.ReadLine());
+            Console.WriteLine();
         }
     }
 }

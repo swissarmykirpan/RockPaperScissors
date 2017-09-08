@@ -1,29 +1,40 @@
-﻿namespace RockPaperScissors
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace RockPaperScissors
 {
     public enum Moves
     {
         Rock,
         Paper,
         Scissors,
-        //Lizard,
-        //Spock
+        Lizard,
+        Spock
     }
 
-    static class MovesExtensions
+    public static class MovesExtensions
     {
-        public static bool Defeats(this Moves move, Moves otherMove)
-        {
-            switch (move)
-            {
-                case Moves.Rock:
-                    return otherMove == Moves.Scissors;
-                case Moves.Scissors:
-                    return otherMove == Moves.Paper;
-                case Moves.Paper:
-                    return otherMove == Moves.Rock;
-            }
+        public static bool Defeats(this Moves move, Moves otherMove) =>
+            Rules.Exists(r => r.WinningMove == move && r.LosingMove == otherMove);
 
-            return false;
-        }
+        public static Moves[] DefeatedBy(this Moves move) =>
+            Rules
+                .Where(r => r.LosingMove == move)
+                .Select(r => r.WinningMove)
+                .ToArray();
+
+        static List<(Moves WinningMove, Moves LosingMove)> Rules => new List<(Moves WinningMove, Moves LosingMove)>
+        {
+            (Moves.Scissors, Moves.Paper),
+            (Moves.Paper, Moves.Rock),
+            (Moves.Rock, Moves.Lizard),
+            (Moves.Lizard, Moves.Spock),
+            (Moves.Spock, Moves.Scissors),
+            (Moves.Scissors, Moves.Lizard),
+            (Moves.Lizard, Moves.Paper),
+            (Moves.Paper, Moves.Spock),
+            (Moves.Spock, Moves.Rock),
+            (Moves.Rock, Moves.Scissors)
+        };
     }
 }
